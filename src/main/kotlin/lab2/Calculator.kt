@@ -10,8 +10,10 @@ const val SPACE_SYMBOL = ' '
 const val OPEN_BRACKET = '('
 const val CLOSE_BRACKET = ')'
 
-val functionsList = listOf("abs", "sqrt", "lg", "ln", "sin", "cos", "tg",
-    "ctg", "asin", "acos", "atg", "actg")
+val functionsList = listOf(
+    "abs", "sqrt", "lg", "ln", "sin", "cos", "tg",
+    "ctg", "asin", "acos", "atg", "actg"
+)
 
 const val PI_STR = "pi"
 const val E_STR = "e"
@@ -24,26 +26,28 @@ const val POW_SYMBOL = '^'
 
 const val UNARY_DECREMENT_SYMBOL = '~'
 
-val binaryOperatorsList = listOf(INCREMENT_SYMBOL, DECREMENT_SYMBOL, MULTIPLICATION_SYMBOL,
-    DIVISION_SYMBOL, POW_SYMBOL)
+val binaryOperatorsList = listOf(
+    INCREMENT_SYMBOL, DECREMENT_SYMBOL, MULTIPLICATION_SYMBOL,
+    DIVISION_SYMBOL, POW_SYMBOL
+)
 // endregion
 
 class Calculator(formulaString: String) {
 
-    private var formulaRoot: FormulaNode? = null
+    private var formulaRoot: FormulaNode
 
     init {
-        formulaRoot = createTree(formulaString)
+        formulaRoot = createTree(formulaString) ?: throw parsingErrorException
     }
 
     fun calculate(): Double {
-        val ret = formulaRoot?.getValue()?:throw parsingErrorException
+        val ret = formulaRoot.getValue()
         if (!ret.isFinite())
             throw calculationErrorException
         return ret
     }
 
-    fun prefix(): String = formulaRoot?.toString()?:throw parsingErrorException
+    fun prefix(): String = formulaRoot.toString()
 
     private fun createTree(formula: String): FormulaNode? {
         if (!bracketsBalanced(formula))
@@ -57,9 +61,9 @@ class Calculator(formulaString: String) {
     private fun bracketsBalanced(formula: String): Boolean {
         var balance = 0
         for (i in formula.indices) {
-            if (formula[i]=='(')
+            if (formula[i] == '(')
                 balance += 1
-            else if (formula[i]==')')
+            else if (formula[i] == ')')
                 balance -= 1
             if (balance < 0)
                 return false
@@ -97,7 +101,7 @@ class Calculator(formulaString: String) {
             return formula
         val ret = StringBuilder(formula.drop(1).dropLast(1))
 
-        return if(bracketsBalanced(ret.toString()))
+        return if (bracketsBalanced(ret.toString()))
             removeOuterBrackets(ret.toString())
         else {
             ret.insert(0, OPEN_BRACKET)
@@ -118,7 +122,7 @@ class Calculator(formulaString: String) {
                 OPEN_BRACKET -> bracketsDepth += 1
                 CLOSE_BRACKET -> bracketsDepth -= 1
                 else -> {
-                    if(bracketsDepth == 0) {
+                    if (bracketsDepth == 0) {
                         curPriority = when (str[i]) {
                             DECREMENT_SYMBOL, INCREMENT_SYMBOL -> {
                                 if (i == 0)
@@ -132,7 +136,7 @@ class Calculator(formulaString: String) {
                             POW_SYMBOL -> 2
                             else -> 3
                         }
-                        if(curPriority < minPriority) {
+                        if (curPriority < minPriority) {
                             minPriority = curPriority
                             splittingPos = i
                         }
@@ -145,15 +149,19 @@ class Calculator(formulaString: String) {
         val ret: FormulaNode
         if (splittingPos >= 0) { // splitting position was founded
             val operatorStr = str[splittingPos]
-            ret = BinaryOperationNode(operatorStr)
-            ret.lChild = createTree(str.substring(0, splittingPos))
-            ret.rChild = createTree(str.substring(splittingPos + 1, str.lastIndex + 1))
+            ret = BinaryOperationNode(
+                operatorStr,
+                createTree(str.substring(0, splittingPos)),
+                createTree(str.substring(splittingPos + 1, str.lastIndex + 1))
+            )
             return ret
         }
         for (i in functionsList.indices) { // there is no binary operators: checking in case of functions
             if (str.startsWith(functionsList[i])) {
-                ret = UnaryOperationNode(functionsList[i])
-                ret.child = createTree(str.drop(functionsList[i].length))
+                ret = UnaryOperationNode(
+                    functionsList[i],
+                    createTree(str.drop(functionsList[i].length))
+                )
                 return ret
             }
         }
@@ -170,16 +178,14 @@ abstract class FormulaNode {
     abstract fun validate(): Boolean
 }
 
-class ValueNode(dataStr: String): FormulaNode() {
+class ValueNode(dataStr: String) : FormulaNode() {
 
     private var data: Double
 
     init {
         try {
             data = dataStr.toDouble()
-        }
-        catch (e: Exception)
-        {
+        } catch (e: Exception) {
             data = Double.NaN
             valid = false
         }
@@ -190,18 +196,15 @@ class ValueNode(dataStr: String): FormulaNode() {
     override fun validate(): Boolean = valid
 
     override fun toString(): String {
-        if(data < 0)
+        if (data < 0)
             return UNARY_DECREMENT_SYMBOL.toString() + SPACE_SYMBOL.toString() + (-data).toString()
         return data.toString()
     }
 }
 
-class UnaryOperationNode(private var operation: String): FormulaNode() {
-
-    var child: FormulaNode? = null
-
+class UnaryOperationNode(private var operation: String, private val child: FormulaNode?) : FormulaNode() {
     init {
-        if(!functionsList.contains(operation))
+        if (!functionsList.contains(operation))
             valid = false
     }
 
@@ -218,30 +221,25 @@ class UnaryOperationNode(private var operation: String): FormulaNode() {
             functionsList[6] -> tan(child!!.getValue())           // tan
             functionsList[7] -> 1 / tan(child!!.getValue())       // ctg
             functionsList[8] -> asin(child!!.getValue())          // asin
-            functionsList[9] -> acos(child!!.getValue())         // acos
+            functionsList[9] -> acos(child!!.getValue())          // acos
             functionsList[10] -> atan(child!!.getValue())         // atg
-            functionsList[11] -> atan(-child!!.getValue()) + PI/2 // actg
+            functionsList[11] -> atan(-child!!.getValue()) + PI / 2 // actg
             else -> Double.NaN
         }
     }
 
-    override fun validate(): Boolean = valid && child?.validate()?:false
+    override fun validate(): Boolean = valid && child?.validate() ?: false
 
-    override fun toString(): String {
-        return if (validate())
-            operation + SPACE_SYMBOL + child!!.toString()
-        else
-            throw parsingErrorException
-    }
+    override fun toString(): String = operation + SPACE_SYMBOL + child.toString()
 }
 
-class BinaryOperationNode(private val operation: Char): FormulaNode() {
-
-    var lChild: FormulaNode? = null
-    var rChild: FormulaNode? = null
-
+class BinaryOperationNode(
+    private val operation: Char,
+    private val lChild: FormulaNode?,
+    private val rChild: FormulaNode?
+) : FormulaNode() {
     init {
-        if(!binaryOperatorsList.contains(operation))
+        if (!binaryOperatorsList.contains(operation))
             valid = false
     }
 
@@ -258,12 +256,8 @@ class BinaryOperationNode(private val operation: Char): FormulaNode() {
         }
     }
 
-    override fun validate(): Boolean = valid && lChild?.validate()?:false && rChild?.validate()?:false
+    override fun validate(): Boolean = valid && lChild?.validate() ?: false && rChild?.validate() ?: false
 
-    override fun toString(): String {
-        return if (validate())
-            operation.toString() + SPACE_SYMBOL + lChild.toString() + SPACE_SYMBOL + rChild.toString()
-        else
-            throw parsingErrorException
-    }
+    override fun toString(): String =
+        operation.toString() + SPACE_SYMBOL + lChild.toString() + SPACE_SYMBOL + rChild.toString()
 }

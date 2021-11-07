@@ -9,15 +9,14 @@ package lab2
 // functions: abs, sqrt, lg, ln, sin, cos, tg, ctg, asin, acos, atg, actg
 // operators: +; -; *; /; ^; ~ (unary minus, using only in prefix notation)
 
-fun main(){
+fun main() {
     print("Infix -> ")
-    val formula = readLine()?:""
+    val formula = readLine() ?: ""
     val calc = Calculator(formula)
     try {
         println("Prefix: " + calc.prefix())
         println("Result: " + calc.calculate())
-    }
-    catch(e: Exception) {
+    } catch (e: Exception) {
         println(e.message)
     }
 }

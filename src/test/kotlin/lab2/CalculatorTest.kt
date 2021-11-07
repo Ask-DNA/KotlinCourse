@@ -1,8 +1,7 @@
 package lab2
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 import kotlin.math.*
 
 class CalculatorTest {
@@ -56,41 +55,34 @@ class CalculatorTest {
         var actual = ""
         try {
             calc.calculate()
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
 
     @Test
     fun parsingError() {
-        var calc = Calculator("cos(pi + 4))^-2 * lg +e")
         val expected = "Parsing error"
         var actual = ""
         try {
-            calc.calculate()
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
-        }
-        assertEquals(expected, actual)
-
-        calc = Calculator("cos(pi + 4)(^-2) * lg +e")
-        try {
-            calc.calculate()
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+            Calculator("cos(pi + 4))^-2 * lg +e")
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
-        calc = Calculator("make 9309 great again")
         try {
-            calc.calculate()
+            Calculator("cos(pi + 4)(^-2) * lg +e")
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
-        catch (e: Exception) {
-            actual = e.message?:""
+        assertEquals(expected, actual)
+
+        try {
+            Calculator("make 9309 great again")
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
