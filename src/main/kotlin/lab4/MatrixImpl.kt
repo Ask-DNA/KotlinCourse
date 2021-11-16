@@ -1,26 +1,46 @@
 package lab4
 
 open class MatrixImpl(_matrix: Array<DoubleArray>) : Matrix {
-    protected open val matrix = _matrix
+    protected open val matrix = copyFrom(_matrix)
     override val rows: Int
         get() = matrix.size
     override val columns: Int
         get() = matrix[0].size
 
-    init {
-        if (_matrix.isEmpty())
+    protected fun copyFrom(origin: Array<DoubleArray>): Array<DoubleArray> {
+        if (origin.isEmpty())
             throw Exception("Matrix can't be empty")
-        if (_matrix[0].isEmpty())
+        if (origin[0].isEmpty())
             throw Exception("Matrix can't be empty")
-        _matrix.forEach {
-            if (it.size != _matrix[0].size)
+        origin.forEach {
+            if (it.size != origin[0].size)
                 throw Exception("Each row must contain the same number of elements")
         }
+
+        val newMatrix = Array(origin.size) { DoubleArray(origin[0].size) }
+        for (i in origin.indices)
+            for (j in origin[0].indices)
+                newMatrix[i][j] = origin[i][j]
+        return newMatrix
+    }
+
+    protected fun copyFrom(origin: MatrixImpl): Array<DoubleArray> {
+        return copyFrom(origin.matrix)
+    }
+
+    protected fun indexCheck(i: Int, j: Int) {
+        if (i >= rows)
+            throw IllegalArgumentException("Index i = $i must be lower than number of rows = $rows")
+        if (i < 0)
+            throw IllegalArgumentException("Index i = $i must be positive or zero")
+        if (j >= columns)
+            throw IllegalArgumentException("Index j = $j must be lower than number of columns = $columns")
+        if (j < 0)
+            throw IllegalArgumentException("Index j = $j must be positive or zero")
     }
 
     override fun get(i: Int, j: Int): Double {
-        if (i >= rows || j >= columns)
-            throw IndexOutOfBoundsException()
+        indexCheck(i, j)
         return matrix[i][j]
     }
 
@@ -98,29 +118,30 @@ open class MatrixImpl(_matrix: Array<DoubleArray>) : Matrix {
 
 class MutableMatrixImpl(_matrix: Array<DoubleArray>) : MutableMatrix, MatrixImpl(_matrix) {
 
-    override var matrix: Array<DoubleArray> = _matrix
-
-    private fun copyFrom(other: Matrix) {
-        val newMatrix = Array(other.rows) { DoubleArray(other.columns) }
-        for (i in 0 until other.rows)
-            for (j in 0 until other.columns)
-                newMatrix[i][j] = other[i, j]
-        matrix = newMatrix
-    }
+    override var matrix: Array<DoubleArray> = copyFrom(_matrix)
 
     override fun set(i: Int, j: Int, value: Double) {
-        if (i >= rows || j >= columns)
-            throw IndexOutOfBoundsException()
+        indexCheck(i, j)
         matrix[i][j] = value
     }
 
-    override fun plusAssign(other: Matrix) = copyFrom(this + other)
+    override fun plusAssign(other: Matrix) {
+        matrix = copyFrom((this + other) as MatrixImpl)
+    }
 
-    override fun minusAssign(other: Matrix) = copyFrom(this - other)
+    override fun minusAssign(other: Matrix) {
+        matrix = copyFrom((this - other) as MatrixImpl)
+    }
 
-    override fun timesAssign(other: Matrix) = copyFrom(this * other)
+    override fun timesAssign(other: Matrix) {
+        matrix = copyFrom((this * other) as MatrixImpl)
+    }
 
-    override fun timesAssign(scalar: Double) = copyFrom(this * scalar)
+    override fun timesAssign(scalar: Double) {
+        matrix = copyFrom((this * scalar) as MatrixImpl)
+    }
 
-    override fun divAssign(scalar: Double) = copyFrom(this / scalar)
+    override fun divAssign(scalar: Double) {
+        matrix = copyFrom((this / scalar) as MatrixImpl)
+    }
 }
