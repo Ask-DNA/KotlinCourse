@@ -23,12 +23,12 @@ class MatrixImplTest {
             doubleArrayOf(1.0, 2.0, 3.0),
             doubleArrayOf(4.0, 5.0)
         )
-        assertFailsWith<Exception> {
+        assertFailsWith<IllegalArgumentException> {
             MatrixImpl(matrixArr)
         }
 
         matrixArr = emptyArray()
-        assertFailsWith<Exception> {
+        assertFailsWith<IllegalArgumentException> {
             MatrixImpl(matrixArr)
         }
     }

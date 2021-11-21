@@ -9,12 +9,12 @@ open class MatrixImpl(_matrix: Array<DoubleArray>) : Matrix {
 
     protected fun copyFrom(origin: Array<DoubleArray>): Array<DoubleArray> {
         if (origin.isEmpty())
-            throw Exception("Matrix can't be empty")
+            throw IllegalArgumentException("Matrix can't be empty")
         if (origin[0].isEmpty())
-            throw Exception("Matrix can't be empty")
+            throw IllegalArgumentException("Matrix can't be empty")
         origin.forEach {
             if (it.size != origin[0].size)
-                throw Exception("Each row must contain the same number of elements")
+                throw IllegalArgumentException("Each row must contain the same number of elements")
         }
 
         val newMatrix = Array(origin.size) { DoubleArray(origin[0].size) }
@@ -30,13 +30,13 @@ open class MatrixImpl(_matrix: Array<DoubleArray>) : Matrix {
 
     protected fun indexCheck(i: Int, j: Int) {
         if (i >= rows)
-            throw IllegalArgumentException("Index i = $i must be lower than number of rows = $rows")
+            throw IndexOutOfBoundsException("Index i = $i must be lower than number of rows = $rows")
         if (i < 0)
-            throw IllegalArgumentException("Index i = $i must be positive or zero")
+            throw IndexOutOfBoundsException("Index i = $i must be positive or zero")
         if (j >= columns)
-            throw IllegalArgumentException("Index j = $j must be lower than number of columns = $columns")
+            throw IndexOutOfBoundsException("Index j = $j must be lower than number of columns = $columns")
         if (j < 0)
-            throw IllegalArgumentException("Index j = $j must be positive or zero")
+            throw IndexOutOfBoundsException("Index j = $j must be positive or zero")
     }
 
     override fun get(i: Int, j: Int): Double {
