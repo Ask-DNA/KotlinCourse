@@ -54,7 +54,7 @@ fun createBooks(): List<Book> {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
     )
     ret.add(
@@ -62,7 +62,7 @@ fun createBooks(): List<Book> {
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
     )
     ret.add(
@@ -70,7 +70,7 @@ fun createBooks(): List<Book> {
             "Оно",
             Author("Стивен Кинг"),
             Year.of(1986),
-            listOf(Genre.HORROR)
+            setOf(Genre.HORROR)
         )
     )
     ret.add(
@@ -78,7 +78,7 @@ fun createBooks(): List<Book> {
             "Сияние",
             Author("Стивен Кинг"),
             Year.of(1977),
-            listOf(Genre.HORROR)
+            setOf(Genre.HORROR)
         )
     )
     ret.add(
@@ -86,7 +86,7 @@ fun createBooks(): List<Book> {
             "Собрание сочинений: т.1",
             Author("Артур Конан Дойль"),
             Year.of(1966),
-            listOf(Genre.DETECTIVE)
+            setOf(Genre.DETECTIVE)
         )
     )
     ret.add(
@@ -94,7 +94,7 @@ fun createBooks(): List<Book> {
             "Собрание сочинений: т.2",
             Author("Артур Конан Дойль"),
             Year.of(1966),
-            listOf(Genre.DETECTIVE)
+            setOf(Genre.DETECTIVE)
         )
     )
     ret.add(
@@ -102,7 +102,7 @@ fun createBooks(): List<Book> {
             "Властелин Колец",
             Author("Толкин Дж.Р.Р."),
             Year.of(1954),
-            listOf(Genre.EPIC, Genre.FANTASY)
+            setOf(Genre.EPIC, Genre.FANTASY)
         )
     )
     ret.add(
@@ -110,7 +110,7 @@ fun createBooks(): List<Book> {
             "Хоббит",
             Author("Толкин Дж.Р.Р."),
             Year.of(1937),
-            listOf(Genre.EPIC, Genre.FANTASY)
+            setOf(Genre.EPIC, Genre.FANTASY)
         )
     )
     return ret

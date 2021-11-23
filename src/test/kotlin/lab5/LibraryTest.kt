@@ -15,13 +15,13 @@ class LibraryTest {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book2 = Book(
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         lib.addBook(book1)
         assertFailsWith<Exception> {
@@ -45,19 +45,19 @@ class LibraryTest {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book2 = Book(
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book3 = Book(
             "Хоббит",
             Author("Толкин Дж.Р.Р."),
             Year.of(1937),
-            listOf(Genre.EPIC, Genre.FANTASY)
+            setOf(Genre.EPIC, Genre.FANTASY)
         )
         lib.addBook(book1, Status.ComingSoon)
         lib.addBook(book2)
@@ -79,13 +79,13 @@ class LibraryTest {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book2 = Book(
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         lib.addBook(book1, Status.ComingSoon)
         lib.setBookStatus(book1, Status.Restoration)
@@ -111,7 +111,7 @@ class LibraryTest {
     fun unregisterUser() {
         val lib = Library()
         val user = User("id")
-        val book = Book("title", Author("author"), Year.of(2000), listOf(Genre.FANTASY))
+        val book = Book("title", Author("author"), Year.of(2000), setOf(Genre.FANTASY))
 
         lib.registerUser("id")
         lib.unregisterUser(user)
@@ -131,13 +131,13 @@ class LibraryTest {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book2 = Book(
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         lib.registerUser("id")
         lib.addBook(book1)
@@ -156,25 +156,25 @@ class LibraryTest {
             "Идиот",
             Author("Достоевский Ф.М."),
             Year.of(1896),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book2 = Book(
             "Бесы",
             Author("Достоевский Ф.М."),
             Year.of(1872),
-            listOf(Genre.CLASSIC)
+            setOf(Genre.CLASSIC)
         )
         val book3 = Book(
             "Хоббит",
             Author("Толкин Дж.Р.Р."),
             Year.of(1937),
-            listOf(Genre.EPIC, Genre.FANTASY)
+            setOf(Genre.EPIC, Genre.FANTASY)
         )
         val book4 = Book(
             "Собрание сочинений: т.2",
             Author("Артур Конан Дойль"),
             Year.of(1966),
-            listOf(Genre.DETECTIVE)
+            setOf(Genre.DETECTIVE)
         )
         lib.addBook(book1)
         lib.registerUser("id1")
