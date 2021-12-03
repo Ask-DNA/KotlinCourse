@@ -1,6 +1,7 @@
 package lab3
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.math.BigDecimal
 import java.math.MathContext
@@ -27,9 +28,8 @@ class ShapeTest {
         val expected = "Radius must be positive"
         try {
             Circle(BigDecimal.ZERO)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
@@ -67,27 +67,24 @@ class ShapeTest {
         var expected = "All angles must be right"
         try {
             Rectangle(p1, p2, p3, p4)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
         expected = "Line must be specified by two different points"
         try {
             Rectangle(p1, p2, p3, p3)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
         expected = "Sides must be greater than 0"
         try {
             Rectangle(BigDecimal.TEN, BigDecimal("-1"))
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
@@ -125,9 +122,8 @@ class ShapeTest {
         var expected = "All angles must be right"
         try {
             Square(p1, p2, p3, Point(BigDecimal.ZERO, BigDecimal.ZERO))
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
@@ -135,27 +131,24 @@ class ShapeTest {
         expected = "Sides must be equal"
         try {
             Square(p1, p2, p3, p4)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
         expected = "Line must be specified by two different points"
         try {
             Square(p1, p2, p3, p3)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
 
         expected = "Sides must be greater than 0"
         try {
             Square(BigDecimal("-1"))
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
@@ -166,14 +159,14 @@ class ShapeTest {
         val p2 = Point(BigDecimal("-0.43"), BigDecimal("2.11"))
         val p3 = Point(BigDecimal("2.57"), BigDecimal("-0.89"))
 
-        var shape = Triangle(p1, p2, p3)
-        var perimeter = Line(p1, p2).length + Line(p2, p3).length + Line(p3, p1).length
+        val shape = Triangle(p1, p2, p3)
+        val perimeter = Line(p1, p2).length + Line(p2, p3).length + Line(p3, p1).length
 
         val p = perimeter / BigDecimal(2)
         val l1 = Line(p1, p2).length
         val l2 = Line(p2, p3).length
         val l3 = Line(p3, p1).length
-        var area = (p * (p - l1) * (p - l2) * (p - l3)).sqrt(MathContext.DECIMAL32)
+        val area = (p * (p - l1) * (p - l2) * (p - l3)).sqrt(MathContext.DECIMAL32)
 
         assertTrue(perimeter.compareTo(shape.calcPerimeter()) == 0)
         assertTrue(area.compareTo(shape.calcArea()) == 0)
@@ -185,12 +178,11 @@ class ShapeTest {
         val p2 = Point(BigDecimal("-1.43"), BigDecimal("3.11"))
 
         var actual = ""
-        var expected = "Triangle must be specified by three different points, which must not be inline"
+        val expected = "Triangle must be specified by three different points, which must not be inline"
         try {
             Triangle(p1, p2, p2)
-        }
-        catch (e: Exception) {
-            actual = e.message?:""
+        } catch (e: Exception) {
+            actual = e.message ?: ""
         }
         assertEquals(expected, actual)
     }
