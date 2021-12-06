@@ -16,7 +16,7 @@ class ShapeCollector<T : Shape> {
 
     fun getAll(): List<T> = allShapes.toList()
 
-    fun getAllSorted(comparator: Comparator<T>): List<T> = allShapes.sortedWith(comparator)
+    fun getAllSorted(comparator: Comparator<in T>): List<T> = allShapes.sortedWith(comparator)
 
-    fun getAllByClass(clazz: Class<*>): List<T> = allShapes.filter { clazz.isInstance(it) }
+    fun getAllByClass(clazz: Class<out T>): List<T> = allShapes.filter { clazz.isInstance(it) }
 }

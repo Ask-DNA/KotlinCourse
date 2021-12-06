@@ -64,7 +64,6 @@ class ShapeCollectorTest {
     fun getAllByClass() {
         val collector = ShapeCollector<Shape>()
         val list = listOf(
-            Square(BigDecimal("4")),
             Rectangle(BigDecimal("3"), BigDecimal("4")),
             Circle(BigDecimal("1"), Point(BigDecimal.ZERO, BigDecimal.ZERO)),
             Circle(BigDecimal("2"), Point(BigDecimal.ZERO, BigDecimal.ZERO)),
@@ -77,8 +76,8 @@ class ShapeCollectorTest {
             Circle(BigDecimal("4"), Point(BigDecimal.ZERO, BigDecimal.ZERO))
         )
         collector.addAll(list)
-        val expected = listOf(list[2], list[3], list[5], list[6])
+        val expected = listOf(list[1], list[2], list[4], list[5])
         assertEquals(expected, collector.getAllByClass(Circle::class.java))
-        assertEquals(emptyList<Shape>(), collector.getAllByClass(ShapeCollector::class.java))
+        assertEquals(emptyList<Shape>(), collector.getAllByClass(Square::class.java))
     }
 }
